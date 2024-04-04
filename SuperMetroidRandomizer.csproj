@@ -17,5 +17,9 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(ProjectDir)\BombBlockFix.ips&quot; &quot;$(TargetDir)&quot; /Y" />
   </Target>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\IPS\IPSLib\IPSLib.csproj" />
+  </ItemGroup>
 
 </Project>
