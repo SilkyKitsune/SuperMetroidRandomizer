@@ -6,6 +6,7 @@
 Arcade/
 Test/
 BombBlockFix.sfc
+PowerDoorFix.sfc
 
 # User-specific files
 *.rsuser
