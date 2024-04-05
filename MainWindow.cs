@@ -12,7 +12,7 @@ public partial class MainWindow : Form
     private const int RomSize = 0x300000;
 
     private const string InvalidFile = "INVALID FILE", InvalidPath = "INVALID PATH", Ext = ".sfc", FileName = "SMMIR_",
-        BombBlockFix = "BombBlockFix.ips";
+        BombBlockFix = "BombBlockFix.ips", PowerDoorFix = "PowerDoorFix.ips";
 
     public MainWindow() => InitializeComponent();
 
@@ -62,6 +62,7 @@ public partial class MainWindow : Form
 
         int seed = int.TryParse(seedText, out int i) ? i : (!string.IsNullOrEmpty(seedText) ? seedText.GetHashCode() : 0);
         IPS patch = new(BombBlockFix);
+        patch.Add(new IPS(PowerDoorFix), false);
         SM.Generate(ref patch, ref seed, out string spoiler, torizoNoSpeedBooster);
 
         string outPath = P.Combine(folderPath, FileName + seed);
