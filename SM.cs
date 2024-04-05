@@ -78,7 +78,7 @@ internal static class SM
     {
         if (seed == 0) seed = GetSeed();
         ips ??= new();
-        spoiler = $"--- SMMIR Spoiler Log ---\nSeed: {seed}\n-\n";
+        spoiler = $"--- SMMIR Spoiler Log ---\nSeed: {seed}\n\n";
         Random r = new(seed);
 
         AutoSizedArray<ItemID> items = new(torizoItems);
