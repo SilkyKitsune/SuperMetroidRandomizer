@@ -9,6 +9,10 @@
 
 ### Additional Info
 - Morph Ball will always be in its vanilla location
+- Bomb Torizo will only have either Bombs, Speed Booster (unless disabled), or Screw Attack
+- Maridia will never have Grapple Beam or Gravity Suit
+	- Spring Ball Room will never have Space Jump
+- Lower Norfair will never have Gravity Suit or Space Jump
 
 ### Important Info
 - Incompleteable seeds are probably possible
