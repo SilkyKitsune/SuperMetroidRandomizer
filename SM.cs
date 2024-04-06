@@ -14,7 +14,7 @@ internal static class SM
         ItemID.ScrewAttack,
         ItemID.SpeedBooster,
     },
-        maridiaItems =
+        springBallItems =
     {
         ItemID.ChargeBeam,
         ItemID.IceBeam,
@@ -25,6 +25,9 @@ internal static class SM
         ItemID.VariaSuit,
         ItemID.XRayScope,
         ItemID.PlasmaBeam,
+    },
+        maridiaItems =
+    {
         ItemID.SpaceJump,
     },
         generalItems =
@@ -33,11 +36,10 @@ internal static class SM
         ItemID.GrappleBeam,
     };
 
-    private static readonly LocationAddress[]
+    private static readonly LocationAddress[]//move to arg fields?
         maridiaLocations =
     {
         LocationAddress.PlasmaBeam,
-        LocationAddress.SpringBall,
         LocationAddress.SpaceJump,
     },
         generalLocations =
@@ -51,7 +53,6 @@ internal static class SM
         LocationAddress.GrappleBeam,
         LocationAddress.SpeedBooster,
         LocationAddress.WaveBeam,
-        LocationAddress.ScrewAttack,
         LocationAddress.GravitySuit,
     };
 
@@ -82,10 +83,17 @@ internal static class SM
         Random r = new(seed);
 
         AutoSizedArray<ItemID> items = new(torizoItems);
-
+        //stored placed items instead? Hash<location, item>?
         if (torizoNoSpeedBooster) items.Remove(ItemID.SpeedBooster);
         PlaceItems(ips, ref spoiler, r, items, LocationAddress.Bombs);
         if (torizoNoSpeedBooster) items.Add(ItemID.SpeedBooster);
+
+        items.Add(springBallItems);
+        PlaceItems(ips, ref spoiler, r, items, LocationAddress.SpringBall);
+
+        items.Add(ItemID.GrappleBeam);
+        PlaceItems(ips, ref spoiler, r, items, LocationAddress.ScrewAttack);
+        items.Remove(ItemID.GrappleBeam);
 
         items.Add(maridiaItems);
         PlaceItems(ips, ref spoiler, r, items, maridiaLocations);
