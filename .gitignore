@@ -4,9 +4,13 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 Arcade/
+
+IPS/BombBlockFix.sfc
+IPS/DropBlockFix.sfc
+IPS/PowerDoorFix.sfc
+IPS/TourianShort.sfc
+
 Test/
-BombBlockFix.sfc
-PowerDoorFix.sfc
 
 # User-specific files
 *.rsuser
