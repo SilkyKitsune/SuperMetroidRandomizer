@@ -3,13 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+*.sfc
+
 Arcade/
-
-IPS/BombBlockFix.sfc
-IPS/DropBlockFix.sfc
-IPS/PowerDoorFix.sfc
-IPS/TourianShort.sfc
-
 Test/
 
 # User-specific files
