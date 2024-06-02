@@ -8,6 +8,7 @@
     <Nullable>disable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>SilkyKitsune</Authors>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -15,7 +16,7 @@
   </PropertyGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(ProjectDir)\BombBlockFix.ips&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)\DropBlockFix.ips&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)\PowerDoorFix.ips&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)\TourianShort.ips&quot; &quot;$(TargetDir)&quot; /Y" />
+    <Exec Command="xcopy &quot;$(ProjectDir)Patches\TorizoBombBlocksFix.ips&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)Patches\PirateShaftDropBlocksFix.ips&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)Patches\LandingSitePowerDoorFix.ips&quot; &quot;$(TargetDir)&quot; /Y&#xD;&#xA;xcopy &quot;$(ProjectDir)Patches\TourianShort.ips&quot; &quot;$(TargetDir)&quot; /Y" />
   </Target>
   
   <ItemGroup>
