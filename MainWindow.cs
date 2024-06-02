@@ -11,8 +11,15 @@ public partial class MainWindow : Form
 {
     private const int RomSize = 0x300000;
 
-    private const string InvalidFile = "INVALID FILE", InvalidPath = "INVALID PATH", Ext = ".sfc", FileName = "SMMIR_",
-        BombBlockFix = "IPS\\BombBlockFix.ips", DropBlockFix = "IPS\\DropBlockFix.ips", PowerDoorFix = "IPS\\PowerDoorFix.ips", TourianShort = "IPS\\TourianShort.ips";
+    private const string InvalidFile = "INVALID FILE", InvalidPath = "INVALID PATH", Ext = ".sfc", FileName = "SMMIR_";
+
+    private static readonly string[] Paths =
+    {
+        "LandingSitePowerDoorFix.ips",
+        "PirateShaftDropBlocksFix.ips",
+        "TorizoBombBlocksFix.ips",
+        "TourianShort.ips",
+    };
 
     public MainWindow() => InitializeComponent();
 
@@ -26,11 +33,15 @@ public partial class MainWindow : Form
     
     private void GenerateButton()
     {
-        if (!F.Exists(BombBlockFix))
-        {
-            Close();
-            return;
-        }
+        IPS patch = new();
+
+        foreach (string path in Paths)
+            if (F.Exists(path) && IPS.TryRead(out IPS patch_, path)) patch.Add(patch_, false);
+            else
+            {
+                Close();
+                return;
+            }
 
         bool ips = ipsCheckBox.Checked, torizoNoSpeedBooster = torizoCheckBox.Checked;
         string romPath = romPathTextBox.Text, folderPath = outputFolderTextBox.Text, seedText = seedTextBox.Text;
@@ -61,10 +72,7 @@ public partial class MainWindow : Form
         generateButton.Enabled = false;
 
         int seed = int.TryParse(seedText, out int i) ? i : (!string.IsNullOrEmpty(seedText) ? seedText.GetHashCode() : 0);
-        IPS patch = new(BombBlockFix);
-        patch.Add(new IPS(DropBlockFix), false);
-        patch.Add(new IPS(PowerDoorFix), false);
-        patch.Add(new IPS(TourianShort), false);
+        
         SM.Generate(ref patch, ref seed, out string spoiler, torizoNoSpeedBooster);
 
         string outPath = P.Combine(folderPath, FileName + seed);
