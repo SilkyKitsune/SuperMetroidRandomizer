@@ -25,8 +25,6 @@ public partial class MainWindow : Form
 
     private void generateButton_Click(object sender, EventArgs e) => GenerateButton();
 
-    private void ipsCheckBox_CheckedChanged(object sender, EventArgs e) => IPSCheckBox();
-
     private void outputFolderButton_Click(object sender, EventArgs e) => OutputFolderButton();
 
     private void romPathButton_Click(object sender, EventArgs e) => RomPathButton();
@@ -43,25 +41,8 @@ public partial class MainWindow : Form
                 return;
             }
 
-        bool ips = ipsCheckBox.Checked, torizoNoSpeedBooster = torizoCheckBox.Checked;
-        string romPath = romPathTextBox.Text, folderPath = outputFolderTextBox.Text, seedText = seedTextBox.Text;
-        byte[] rom = null;
-
-        if (!ips)
-        {
-            if (!F.Exists(romPath))
-            {
-                romPathTextBox.Text = InvalidPath;
-                return;
-            }
-
-            rom = F.ReadAllBytes(romPath);
-            if (rom.Length != RomSize)
-            {
-                romPathTextBox.Text = InvalidFile;
-                return;
-            }
-        }
+        bool torizoNoSpeedBooster = torizoCheckBox.Checked;
+        string folderPath = outputFolderTextBox.Text, seedText = seedTextBox.Text;
 
         if (!D.Exists(folderPath))
         {
@@ -77,22 +58,10 @@ public partial class MainWindow : Form
 
         string outPath = P.Combine(folderPath, FileName + seed);
         F.WriteAllText(outPath + "_Spoiler.txt", spoiler);
-        if (ips) patch.WritePatch(outPath);
-        else
-        {
-            patch.Apply(rom);
-            F.WriteAllBytes(P.Combine(folderPath, outPath + Ext), rom);
-        }
+        patch.WritePatch(outPath);
 
         seedTextBox.Text = seed.ToString();
         generateButton.Enabled = true;
-    }
-
-    private void IPSCheckBox()
-    {
-        bool ips = ipsCheckBox.Checked;
-        romPathTextBox.Enabled = !ips;
-        romPathButton.Enabled = !ips;
     }
 
     private void OutputFolderButton()

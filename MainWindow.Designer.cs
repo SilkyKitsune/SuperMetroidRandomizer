@@ -48,6 +48,7 @@ namespace SuperMetroidRandomizer
             // 
             // romPathTextBox
             // 
+            romPathTextBox.Enabled = false;
             romPathTextBox.Location = new Point(12, 27);
             romPathTextBox.Name = "romPathTextBox";
             romPathTextBox.Size = new Size(269, 23);
@@ -62,6 +63,7 @@ namespace SuperMetroidRandomizer
             // 
             // romPathButton
             // 
+            romPathButton.Enabled = false;
             romPathButton.Location = new Point(287, 27);
             romPathButton.Name = "romPathButton";
             romPathButton.Size = new Size(25, 23);
@@ -101,13 +103,15 @@ namespace SuperMetroidRandomizer
             // ipsCheckBox
             // 
             ipsCheckBox.AutoSize = true;
+            ipsCheckBox.Checked = true;
+            ipsCheckBox.CheckState = CheckState.Checked;
+            ipsCheckBox.Enabled = false;
             ipsCheckBox.Location = new Point(152, 172);
             ipsCheckBox.Name = "ipsCheckBox";
             ipsCheckBox.Size = new Size(79, 19);
             ipsCheckBox.TabIndex = 6;
             ipsCheckBox.Text = "Export IPS";
             ipsCheckBox.UseVisualStyleBackColor = true;
-            ipsCheckBox.CheckedChanged += ipsCheckBox_CheckedChanged;
             // 
             // generateButton
             // 
