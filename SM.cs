@@ -56,6 +56,18 @@ internal static class SM
         LocationAddress.GravitySuit,
     };
 
+    private static Patch[] ConvertTableToPatches(LookupTable<LocationAddress, ItemID> table)
+    {
+        Patch[] patches = new Patch[table.Length];
+
+        LocationAddress[] locations = table.GetCodes();
+        ItemID[] items = table.GetValues();
+        for (int i = 0; i < locations.Length; i++)
+            patches[i] = new((int)locations[i], Data.GetBytes((short)items[i], true));
+
+        return patches;
+    }
+
     private static int GetSeed()
     {
         int ms = Environment.TickCount;
