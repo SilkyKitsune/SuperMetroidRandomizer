@@ -68,6 +68,33 @@ internal static class SM
         return patches;
     }
 
+    private static Patch[] VanillaLogic(ref string spoiler, Random r, bool torizoNoSpeedBooster = false)
+    {
+        r ??= new(GetSeed());
+
+        LookupTable<LocationAddress, ItemID> itemTable = new();
+        AutoSizedArray<ItemID> itemsToPlace = new(torizoItems);
+
+        if (torizoNoSpeedBooster) itemsToPlace.Remove(ItemID.SpeedBooster);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.Bombs);
+        if (torizoNoSpeedBooster) itemsToPlace.Add(ItemID.SpeedBooster);
+
+        itemsToPlace.Add(springBallItems);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.SpringBall);
+
+        itemsToPlace.Add(ItemID.GrappleBeam);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.ScrewAttack);
+        itemsToPlace.Remove(ItemID.GrappleBeam);
+
+        itemsToPlace.Add(maridiaItems);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, maridiaLocations);
+
+        itemsToPlace.Add(generalItems);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, generalLocations);
+
+        return ConvertTableToPatches(itemTable);
+    }
+
     private static int GetSeed()
     {
         int ms = Environment.TickCount;
@@ -94,30 +121,6 @@ internal static class SM
         spoiler = $"--- SMMIR Spoiler Log ---\nSeed: {seed}\n\n";
         Random r = new(seed);
 
-        AutoSizedArray<ItemID> itemsToPlace = new(torizoItems);
-        LookupTable<LocationAddress, ItemID> itemTable = new();
-        if (torizoNoSpeedBooster) itemsToPlace.Remove(ItemID.SpeedBooster);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.Bombs);
-        if (torizoNoSpeedBooster) itemsToPlace.Add(ItemID.SpeedBooster);
-
-        itemsToPlace.Add(springBallItems);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.SpringBall);
-
-        itemsToPlace.Add(ItemID.GrappleBeam);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.ScrewAttack);
-        itemsToPlace.Remove(ItemID.GrappleBeam);
-
-        itemsToPlace.Add(maridiaItems);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, maridiaLocations);
-
-        itemsToPlace.Add(generalItems);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, generalLocations);
-
-        //use table.join() to make spoiler?
-
-        LocationAddress[] locations = itemTable.GetCodes();
-        ItemID[] items = itemTable.GetValues();
-        for (int i = 0; i < locations.Length; i++)
-            ips.Add(false, (int)locations[i], Data.GetBytes((short)items[i], true));
+        ips.Add(MergeMode.None, VanillaLogic(ref spoiler, r, torizoNoSpeedBooster));
     }
 }
