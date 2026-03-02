@@ -63,15 +63,15 @@ internal static class SM
         return ms ^ ((now.Year * 10000) + (now.Month * 100) + now.Day);
     }
 
-    private static void PlaceItems(IPS patch, ref string spoiler, Random r, AutoSizedArray<ItemID> items, params LocationAddress[] locations)
+    private static void PlaceItems(LookupTable<LocationAddress, ItemID> itemTable, ref string spoiler, Random r, AutoSizedArray<ItemID> itemsToPlace, params LocationAddress[] locations)
     {
         foreach (LocationAddress location in locations)
         {
-            int i = r.Next(items.Length);
-            ItemID item = items[i];
-            patch.Add(false, (int)location, GetBytes((short)item, true));
+            int i = r.Next(itemsToPlace.Length);
+            ItemID item = itemsToPlace[i];
+            itemTable.Add(location, item);
             spoiler += $"{location} => {item}\n";
-            items.RemoveAt(i);
+            itemsToPlace.RemoveAt(i);
         }
     }
 
@@ -82,23 +82,30 @@ internal static class SM
         spoiler = $"--- SMMIR Spoiler Log ---\nSeed: {seed}\n\n";
         Random r = new(seed);
 
-        AutoSizedArray<ItemID> items = new(torizoItems);
-        //stored placed items instead? Hash<location, item>?
-        if (torizoNoSpeedBooster) items.Remove(ItemID.SpeedBooster);
-        PlaceItems(ips, ref spoiler, r, items, LocationAddress.Bombs);
-        if (torizoNoSpeedBooster) items.Add(ItemID.SpeedBooster);
+        AutoSizedArray<ItemID> itemsToPlace = new(torizoItems);
+        LookupTable<LocationAddress, ItemID> itemTable = new();
+        if (torizoNoSpeedBooster) itemsToPlace.Remove(ItemID.SpeedBooster);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.Bombs);
+        if (torizoNoSpeedBooster) itemsToPlace.Add(ItemID.SpeedBooster);
 
-        items.Add(springBallItems);
-        PlaceItems(ips, ref spoiler, r, items, LocationAddress.SpringBall);
+        itemsToPlace.Add(springBallItems);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.SpringBall);
 
-        items.Add(ItemID.GrappleBeam);
-        PlaceItems(ips, ref spoiler, r, items, LocationAddress.ScrewAttack);
-        items.Remove(ItemID.GrappleBeam);
+        itemsToPlace.Add(ItemID.GrappleBeam);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.ScrewAttack);
+        itemsToPlace.Remove(ItemID.GrappleBeam);
 
-        items.Add(maridiaItems);
-        PlaceItems(ips, ref spoiler, r, items, maridiaLocations);
+        itemsToPlace.Add(maridiaItems);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, maridiaLocations);
 
-        items.Add(generalItems);
-        PlaceItems(ips, ref spoiler, r, items, generalLocations);
+        itemsToPlace.Add(generalItems);
+        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, generalLocations);
+
+        //use table.join() to make spoiler?
+
+        LocationAddress[] locations = itemTable.GetCodes();
+        ItemID[] items = itemTable.GetValues();
+        for (int i = 0; i < locations.Length; i++)
+            ips.Add(false, (int)locations[i], Data.GetBytes((short)items[i], true));
     }
 }
