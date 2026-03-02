@@ -1,6 +1,6 @@
 ﻿using System;
 using ProjectFox.CoreEngine.Collections;
-using static ProjectFox.CoreEngine.Data.Data;
+using ProjectFox.CoreEngine.Data;
 using IPSLib;
 
 namespace SuperMetroidRandomizer;
@@ -75,7 +75,7 @@ internal static class SM
         }
     }
 
-    internal static void Generate(ref IPS ips, ref int seed, out string spoiler, bool torizoNoSpeedBooster = false)
+    internal static void Generate(ref IPSOld ips, ref int seed, out string spoiler, bool torizoNoSpeedBooster = false)
     {
         if (seed == 0) seed = GetSeed();
         ips ??= new();

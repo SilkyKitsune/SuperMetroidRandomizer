@@ -31,10 +31,10 @@ public partial class MainWindow : Form
     
     private void GenerateButton()
     {
-        IPS patch = new();
+        IPSOld patch = new();
 
         foreach (string path in Paths)
-            if (F.Exists(path) && IPS.TryRead(out IPS patch_, path)) patch.Add(patch_, false);
+            if (F.Exists(path) && IPSOld.TryRead(out IPSOld patch_, path)) patch.Add(patch_, MergeMode.None);
             else
             {
                 Close();
