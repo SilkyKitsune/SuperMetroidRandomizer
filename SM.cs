@@ -68,6 +68,25 @@ internal static class SM
         return patches;
     }
 
+    private static int GetSeed()
+    {
+        int ms = Environment.TickCount;
+        DateTime now = DateTime.Now;
+        return ms ^ ((now.Year * 10000) + (now.Month * 100) + now.Day);
+    }
+
+    private static void PlaceItems(LookupTable<LocationAddress, ItemID> itemTable, ref string spoiler, Random r, AutoSizedArray<ItemID> itemsToPlace, params LocationAddress[] locations)
+    {
+        foreach (LocationAddress location in locations)
+        {
+            int i = r.Next(itemsToPlace.Length);
+            ItemID item = itemsToPlace[i];
+            itemTable.Add(location, item);
+            spoiler += $"{location} => {item}\n";
+            itemsToPlace.RemoveAt(i);
+        }
+    }
+
     private static Patch[] VanillaLogic(ref string spoiler, Random r, bool torizoNoSpeedBooster = false)
     {
         r ??= new(GetSeed());
@@ -95,26 +114,7 @@ internal static class SM
         return ConvertTableToPatches(itemTable);
     }
 
-    private static int GetSeed()
-    {
-        int ms = Environment.TickCount;
-        DateTime now = DateTime.Now;
-        return ms ^ ((now.Year * 10000) + (now.Month * 100) + now.Day);
-    }
-
-    private static void PlaceItems(LookupTable<LocationAddress, ItemID> itemTable, ref string spoiler, Random r, AutoSizedArray<ItemID> itemsToPlace, params LocationAddress[] locations)
-    {
-        foreach (LocationAddress location in locations)
-        {
-            int i = r.Next(itemsToPlace.Length);
-            ItemID item = itemsToPlace[i];
-            itemTable.Add(location, item);
-            spoiler += $"{location} => {item}\n";
-            itemsToPlace.RemoveAt(i);
-        }
-    }
-
-    internal static void Generate(ref IPSOld ips, ref int seed, out string spoiler, bool torizoNoSpeedBooster = false)
+    internal static void Generate(ref IPSOld ips, ref int seed, out string spoiler, bool rotation = false, bool torizoNoSpeedBooster = false)
     {
         if (seed == 0) seed = GetSeed();
         ips ??= new();
