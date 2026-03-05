@@ -21,7 +21,28 @@ public partial class MainWindow : Form
         "TourianShort.ips",
     };
 
-    public MainWindow() => InitializeComponent();
+    public MainWindow()
+    {
+        InitializeComponent();
+
+        string invalidPaths = "";
+        foreach (string path in Paths)
+            if (IPS.TryRead(out IPS ips, path)) patches.Add(ips, MergeMode.None);
+            else invalidPaths += path + '\n';
+
+        if (invalidPaths.Length > 0)
+        {
+            outputFolderTextBox.Enabled = false;
+            outputFolderButton.Enabled = false;
+            seedTextBox.Enabled = false;
+            torizoCheckBox.Enabled = false;
+            generateButton.Enabled = false;
+            seedTextBox.Text = outputFolderTextBox.Text = "INVALID PATCHES";//temp
+            MessageBox.Show("These patches could not be loaded they may be missing or corrupt:\n" + invalidPaths, "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+    }
+
+    private readonly IPS patches = new();
 
     private void generateButton_Click(object sender, EventArgs e) => GenerateButton();
 
@@ -32,14 +53,7 @@ public partial class MainWindow : Form
     private void GenerateButton()
     {
         IPS patch = new();
-
-        foreach (string path in Paths)
-            if (F.Exists(path) && IPS.TryRead(out IPS patch_, path)) patch.Add(patch_, MergeMode.None);
-            else
-            {
-                Close();
-                return;
-            }
+        patch.Add(patches, MergeMode.None);
 
         bool torizoNoSpeedBooster = torizoCheckBox.Checked;
         string folderPath = outputFolderTextBox.Text, seedText = seedTextBox.Text;
