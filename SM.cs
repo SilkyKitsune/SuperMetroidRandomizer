@@ -114,7 +114,7 @@ internal static class SM
         return ConvertTableToPatches(itemTable);
     }
 
-    internal static void Generate(ref IPSOld ips, ref int seed, out string spoiler, bool rotation = false, bool torizoNoSpeedBooster = false)
+    internal static void Generate(ref IPS ips, ref int seed, out string spoiler, bool torizoNoSpeedBooster = false)
     {
         if (seed == 0) seed = GetSeed();
         ips ??= new();
