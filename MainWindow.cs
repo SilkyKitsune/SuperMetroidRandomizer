@@ -52,9 +52,6 @@ public partial class MainWindow : Form
     
     private void GenerateButton()
     {
-        IPS patch = new();
-        patch.Add(patches, MergeMode.None);
-
         bool torizoNoSpeedBooster = torizoCheckBox.Checked;
         string folderPath = outputFolderTextBox.Text, seedText = seedTextBox.Text;
 
@@ -65,6 +62,9 @@ public partial class MainWindow : Form
         }
 
         generateButton.Enabled = false;
+
+        IPS patch = new();
+        patch.Add(patches, MergeMode.None);
 
         int seed = int.TryParse(seedText, out int i) ? i : (!string.IsNullOrEmpty(seedText) ? seedText.GetHashCode() : 0);
         
