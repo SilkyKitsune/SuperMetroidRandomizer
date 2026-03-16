@@ -1,7 +1,5 @@
 using System;
-using F = System.IO.File;
-using D = System.IO.Directory;
-using P = System.IO.Path;
+using System.IO;
 using System.Windows.Forms;
 using IPSLib;
 
@@ -61,7 +59,7 @@ public partial class MainWindow : Form
             return;
         }
 
-        if (!D.Exists(folderPath))
+        if (!Directory.Exists(folderPath))
         {
             MessageBox.Show("Output folder path does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
@@ -76,8 +74,8 @@ public partial class MainWindow : Form
         
         SM.Generate(ref patch, ref seed, out string spoiler, torizoNoSpeedBooster);
 
-        string outPath = P.Combine(folderPath, FileName + seed);
-        F.WriteAllText(outPath + "_Spoiler.txt", spoiler);
+        string outPath = Path.Combine(folderPath, "SMMIR_" + seed);
+        File.WriteAllText(outPath + "_Spoiler.txt", spoiler);
         patch.WritePatch(outPath);
 
         seedTextBox.Text = seed.ToString();
