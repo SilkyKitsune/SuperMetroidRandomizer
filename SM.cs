@@ -75,16 +75,30 @@ internal static class SM
         return ms ^ ((now.Year * 10000) + (now.Month * 100) + now.Day);
     }
 
-    private static void PlaceItems(LookupTable<LocationAddress, ItemID> itemTable, ref string spoiler, Random r, AutoSizedArray<ItemID> itemsToPlace, params LocationAddress[] locations)
+    private static void PlaceItems(LookupTable<LocationAddress, ItemID> itemTable, AutoSizedArray<ItemID> itemsToPlace, ref string spoiler, Random r, LocationAddress[] locations, ItemID[] excludedItems = null)
     {
+        bool moveExcludedItems = excludedItems != null;
+        AutoSizedArray<ItemID> excludedItemsBuffer = null;
+
+        if (moveExcludedItems)
+        {
+            itemsToPlace.DeepCopy(out excludedItemsBuffer);
+
+            foreach (ItemID excludedItem in excludedItems) itemsToPlace.Remove(excludedItem);
+
+            foreach (ItemID item in itemsToPlace.ToArray()) excludedItemsBuffer.Remove(item);
+        }
+
         foreach (LocationAddress location in locations)
         {
-            int i = r.Next(itemsToPlace.Length);
-            ItemID item = itemsToPlace[i];
+            int n = r.Next(itemsToPlace.Length);
+            ItemID item = itemsToPlace[n];
             itemTable.Add(location, item);
             spoiler += $"{location} => {item}\n";
-            itemsToPlace.RemoveAt(i);
+            itemsToPlace.RemoveAt(n);
         }
+
+        if (moveExcludedItems) itemsToPlace.Add(excludedItemsBuffer.ToArray());
     }
 
     private static Patch[] VanillaLogic(ref string spoiler, Random r, bool torizoNoSpeedBooster = false)
@@ -95,21 +109,21 @@ internal static class SM
         AutoSizedArray<ItemID> itemsToPlace = new(torizoItems);
 
         if (torizoNoSpeedBooster) itemsToPlace.Remove(ItemID.SpeedBooster);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.Bombs);
+        PlaceItems(itemTable, itemsToPlace, ref spoiler, r, new LocationAddress[] { LocationAddress.Bombs });
         if (torizoNoSpeedBooster) itemsToPlace.Add(ItemID.SpeedBooster);
 
         itemsToPlace.Add(springBallItems);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.SpringBall);
+        PlaceItems(itemTable, itemsToPlace, ref spoiler, r, new LocationAddress[] { LocationAddress.SpringBall });
 
         itemsToPlace.Add(ItemID.GrappleBeam);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, LocationAddress.ScrewAttack);
+        PlaceItems(itemTable, itemsToPlace, ref spoiler, r, new LocationAddress[] { LocationAddress.ScrewAttack });
         itemsToPlace.Remove(ItemID.GrappleBeam);
 
         itemsToPlace.Add(maridiaItems);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, maridiaLocations);
+        PlaceItems(itemTable, itemsToPlace, ref spoiler, r, maridiaLocations);
 
         itemsToPlace.Add(generalItems);
-        PlaceItems(itemTable, ref spoiler, r, itemsToPlace, generalLocations);
+        PlaceItems(itemTable, itemsToPlace, ref spoiler, r, generalLocations);
 
         return ConvertTableToPatches(itemTable);
     }
