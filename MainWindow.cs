@@ -7,10 +7,6 @@ namespace SuperMetroidRandomizer;
 
 public partial class MainWindow : Form
 {
-    private const int RomSize = 0x300000;
-
-    private const string InvalidFile = "INVALID FILE", InvalidPath = "INVALID PATH", Ext = ".sfc", FileName = "SMMIR_";
-
     private static readonly string[] Paths =
     {
         "LandingSitePowerDoorFix.ips",
