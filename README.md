@@ -7,7 +7,10 @@
 ![alt text](Patches/TorizoBombBlocksFix_792FD.png "These are shot blocks now")
 - The power bomb above landing site is blocked by a super missile door now (originally a power bomb door)  
 ![alt text](Patches/LandingSitePowerDoorFix_791F8.png "Originally a power bomb door")
-- These drop blocks, which I'm sure everyone is familiar with, no longer respawn (image coming soon)
+- This shot block in the very tall red room no longer respawns
+![alt text](Patches/RedShaftShotBlockFix_7A253.png "No longer respawns")
+- These drop blocks, which I'm sure everyone is familiar with, no longer respawn
+![alt text](Patches/PirateShaftDropBlocksFix_799BD.png "These don't respawn! :D")
 
 ### Additional Info
 - Morph Ball will always be in its vanilla location
