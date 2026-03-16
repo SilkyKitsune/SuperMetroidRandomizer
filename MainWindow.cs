@@ -55,9 +55,15 @@ public partial class MainWindow : Form
         bool torizoNoSpeedBooster = torizoCheckBox.Checked;
         string folderPath = outputFolderTextBox.Text, seedText = seedTextBox.Text;
 
+        if (string.IsNullOrEmpty(folderPath))
+        {
+            MessageBox.Show("No output folder path specified", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            return;
+        }
+
         if (!D.Exists(folderPath))
         {
-            outputFolderTextBox.Text = InvalidPath;
+            MessageBox.Show("Output folder path does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
 
