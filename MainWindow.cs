@@ -15,6 +15,8 @@ public partial class MainWindow : Form
     {
         "LandingSitePowerDoorFix.ips",
         "PirateShaftDropBlocksFix.ips",
+        "RedShaftShotBlockFix.ips",
+        "StartWithMorphBall.ips",
         "TorizoBombBlocksFix.ips",
         "TourianShort.ips",
     };
